@@ -1,0 +1,1810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TrendIdea — Turn Trends Into Campaigns</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #fdf8f2;
+      --warm-white: #faf4ec;
+      --tan: #e8ddd0;
+      --light-tan: #f0e8de;
+      --brown: #9b7355;
+      --mid-brown: #7a5c44;
+      --dark-brown: #5c3d2e;
+      --deep-brown: #3a2417;
+      --accent: #c4956a;
+      --accent-light: #e8c9a8;
+      --gold: #d4a853;
+      --text-dark: #3a2a1e;
+      --text-mid: #7a5c44;
+      --text-light: #b89880;
+      --text-faint: #d4c0b0;
+      --card-border: rgba(196,149,106,0.2);
+      --card-border-hover: rgba(196,149,106,0.45);
+      --shadow-sm: 0 2px 12px rgba(92,61,46,0.08);
+      --shadow-md: 0 6px 24px rgba(92,61,46,0.12);
+      --shadow-lg: 0 16px 48px rgba(92,61,46,0.16);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--light-tan); }
+    ::-webkit-scrollbar-thumb { background: var(--accent-light); border-radius: 3px; }
+
+    /* ── NOISE TEXTURE ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.4;
+    }
+
+    /* ── PAGES ── */
+    .page { display: none; min-height: 100vh; }
+    .page.active { display: block; }
+
+    /* ══════════════════════════════════════
+       LANDING PAGE
+    ══════════════════════════════════════ */
+    #page-landing {
+      background: var(--cream);
+      position: relative;
+    }
+
+    .landing-bg {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .bg-circle {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.12;
+    }
+    .bg-circle-1 {
+      width: 600px; height: 600px;
+      top: -200px; right: -150px;
+      background: radial-gradient(circle, var(--accent), transparent);
+    }
+    .bg-circle-2 {
+      width: 400px; height: 400px;
+      bottom: -100px; left: -100px;
+      background: radial-gradient(circle, var(--gold), transparent);
+    }
+    .bg-circle-3 {
+      width: 300px; height: 300px;
+      top: 40%; left: 10%;
+      background: radial-gradient(circle, var(--tan), transparent);
+    }
+
+    /* NAV */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.2rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(253,248,242,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--card-border);
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--deep-brown);
+      letter-spacing: -0.5px;
+      cursor: pointer;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-link {
+      font-size: 14px;
+      color: var(--text-mid);
+      text-decoration: none;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .nav-link:hover { color: var(--dark-brown); }
+    .nav-cta {
+      padding: 9px 22px;
+      background: var(--dark-brown);
+      color: #fff;
+      border: none;
+      border-radius: 25px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .nav-cta:hover {
+      background: var(--brown);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8rem 2rem 4rem;
+      position: relative;
+    }
+    .hero-eyebrow {
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.8s ease both;
+    }
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      font-weight: 700;
+      color: var(--deep-brown);
+      line-height: 1.1;
+      max-width: 800px;
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.8s ease 0.1s both;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+    .hero-sub {
+      font-size: 1.1rem;
+      color: var(--text-mid);
+      max-width: 520px;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+      animation: fadeUp 0.8s ease 0.2s both;
+    }
+    .hero-btns {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      animation: fadeUp 0.8s ease 0.3s both;
+    }
+    .btn-hero-primary {
+      padding: 14px 36px;
+      background: var(--dark-brown);
+      color: #fff;
+      border: none;
+      border-radius: 30px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.25s;
+      box-shadow: var(--shadow-md);
+    }
+    .btn-hero-primary:hover {
+      background: var(--deep-brown);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+    .btn-hero-secondary {
+      padding: 14px 36px;
+      background: transparent;
+      color: var(--dark-brown);
+      border: 1.5px solid var(--card-border-hover);
+      border-radius: 30px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+    .btn-hero-secondary:hover {
+      background: var(--light-tan);
+      transform: translateY(-2px);
+    }
+
+    /* STATS BAR */
+    .stats-bar {
+      display: flex;
+      gap: 3rem;
+      justify-content: center;
+      margin-top: 4rem;
+      padding-top: 3rem;
+      border-top: 1px solid var(--card-border);
+      animation: fadeUp 0.8s ease 0.4s both;
+      flex-wrap: wrap;
+    }
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--dark-brown);
+    }
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-light);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    /* FEATURES SECTION */
+    .features {
+      padding: 6rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    .section-eyebrow {
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      color: var(--deep-brown);
+      line-height: 1.2;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .feature-card {
+      background: var(--warm-white);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 2rem;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--gold));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--card-border-hover);
+    }
+    .feature-card:hover::before { opacity: 1; }
+    .feature-icon {
+      width: 48px; height: 48px;
+      background: var(--light-tan);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 1.25rem;
+    }
+    .feature-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--dark-brown);
+      margin-bottom: 0.5rem;
+    }
+    .feature-desc {
+      font-size: 14px;
+      color: var(--text-mid);
+      line-height: 1.6;
+    }
+
+    /* HOW IT WORKS */
+    .how-it-works {
+      padding: 6rem 2rem;
+      background: var(--warm-white);
+      border-top: 1px solid var(--card-border);
+      border-bottom: 1px solid var(--card-border);
+    }
+    .how-inner {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .steps-row {
+      display: flex;
+      gap: 0;
+      position: relative;
+      margin-top: 3rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .steps-row::before {
+      content: '';
+      position: absolute;
+      top: 28px; left: 10%; right: 10%;
+      height: 1px;
+      background: var(--tan);
+    }
+    .step {
+      flex: 1;
+      min-width: 180px;
+      max-width: 220px;
+      text-align: center;
+      padding: 0 1rem;
+      position: relative;
+    }
+    .step-num {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: var(--cream);
+      border: 2px solid var(--accent-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: var(--accent);
+      margin: 0 auto 1.25rem;
+      position: relative;
+      z-index: 1;
+    }
+    .step-title {
+      font-weight: 500;
+      color: var(--dark-brown);
+      margin-bottom: 0.5rem;
+    }
+    .step-desc { font-size: 13px; color: var(--text-light); line-height: 1.5; }
+
+    /* CTA BANNER */
+    .cta-banner {
+      padding: 6rem 2rem;
+      text-align: center;
+    }
+    .cta-inner {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .cta-inner .section-title { margin-bottom: 1rem; }
+    .cta-inner p { font-size: 15px; color: var(--text-mid); margin-bottom: 2rem; line-height: 1.7; }
+
+    footer {
+      padding: 2rem;
+      text-align: center;
+      border-top: 1px solid var(--card-border);
+      font-size: 13px;
+      color: var(--text-faint);
+    }
+    footer span { color: var(--accent); }
+
+    /* ══════════════════════════════════════
+       APP PAGE
+    ══════════════════════════════════════ */
+    #page-app { background: var(--cream); }
+
+    .app-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(253,248,242,0.92);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+    }
+    .app-nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--deep-brown);
+      cursor: pointer;
+    }
+    .app-nav-logo span { color: var(--accent); }
+    .app-tabs {
+      display: flex;
+      gap: 4px;
+    }
+    .app-tab {
+      padding: 7px 18px;
+      border-radius: 20px;
+      border: none;
+      background: transparent;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-mid);
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .app-tab:hover { color: var(--dark-brown); background: var(--light-tan); }
+    .app-tab.active { background: var(--dark-brown); color: #fff; }
+    .app-tab-icon { font-size: 16px; }
+
+    .app-container { max-width: 820px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+
+    /* APP SECTIONS */
+    .app-section { display: none; animation: fadeUp 0.4s ease; }
+    .app-section.active { display: block; }
+
+    .app-section-header { margin-bottom: 2rem; }
+    .app-section-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: var(--deep-brown);
+      margin-bottom: 0.4rem;
+    }
+    .app-section-header p { font-size: 14px; color: var(--text-light); }
+
+    /* BRAND FORM */
+    .brand-form {
+      background: var(--warm-white);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 2rem;
+    }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+    .form-grid.cols-1 { grid-template-columns: 1fr; }
+    .form-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .form-field { display: flex; flex-direction: column; gap: 6px; }
+    .form-label {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-light);
+      font-weight: 500;
+    }
+    .form-input, .form-select {
+      padding: 11px 15px;
+      border: 1.5px solid var(--card-border);
+      background: var(--cream);
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--text-dark);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      -webkit-appearance: none;
+    }
+    .form-input:focus, .form-select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(196,149,106,0.12);
+    }
+    .form-select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239b7355' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+
+    .btn-primary {
+      width: 100%;
+      padding: 13px 24px;
+      background: var(--dark-brown);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 1.25rem;
+      letter-spacing: 0.3px;
+    }
+    .btn-primary:hover { background: var(--deep-brown); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+    .btn-primary:disabled { opacity: 0.55; transform: none; cursor: not-allowed; }
+    .btn-primary.loading { position: relative; color: transparent; }
+    .btn-primary.loading::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 18px; height: 18px;
+      margin: -9px 0 0 -9px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    .brand-summary {
+      background: var(--light-tan);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .brand-summary-title {
+      font-size: 13px;
+      color: var(--text-light);
+      margin-right: auto;
+    }
+    .brand-chip {
+      padding: 4px 12px;
+      background: var(--warm-white);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      font-size: 12px;
+      color: var(--dark-brown);
+      font-weight: 500;
+    }
+    .btn-edit {
+      padding: 5px 14px;
+      background: transparent;
+      border: 1px solid var(--accent-light);
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      color: var(--brown);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-edit:hover { background: var(--accent-light); }
+
+    /* TREND CARDS */
+    .trends-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .trends-count {
+      font-size: 13px;
+      color: var(--text-light);
+    }
+    .filter-chips {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .filter-chip {
+      padding: 4px 12px;
+      border-radius: 20px;
+      border: 1px solid var(--card-border);
+      background: transparent;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      color: var(--text-mid);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-chip:hover, .filter-chip.active {
+      background: var(--dark-brown);
+      color: #fff;
+      border-color: var(--dark-brown);
+    }
+
+    .trends-grid { display: grid; gap: 1rem; }
+
+    .trend-card {
+      background: var(--warm-white);
+      border: 1.5px solid var(--card-border);
+      border-radius: 18px;
+      padding: 1.25rem 1.5rem;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .trend-card::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0; left: 0;
+      width: 4px;
+      background: linear-gradient(180deg, var(--accent), var(--gold));
+      opacity: 0;
+      transition: opacity 0.3s;
+      border-radius: 4px 0 0 4px;
+    }
+    .trend-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--card-border-hover);
+    }
+    .trend-card:hover::after { opacity: 1; }
+    .trend-card.selected {
+      border-color: var(--accent);
+      background: #fff;
+      box-shadow: var(--shadow-sm);
+    }
+    .trend-card.selected::after { opacity: 1; }
+
+    .trend-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 10px;
+    }
+    .trend-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--deep-brown);
+      flex: 1;
+    }
+    .match-badge {
+      flex-shrink: 0;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      background: rgba(196,149,106,0.12);
+      color: var(--brown);
+    }
+    .match-badge.high { background: rgba(92,61,46,0.1); color: var(--dark-brown); }
+    .match-badge.top { background: var(--dark-brown); color: #fff; }
+
+    .trend-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .tag {
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      background: var(--light-tan);
+      color: var(--text-mid);
+    }
+    .tag.stage-rising { background: rgba(212,168,83,0.15); color: #9a7420; }
+    .tag.stage-peak { background: rgba(196,149,106,0.2); color: var(--brown); }
+    .tag.stage-fading { background: rgba(184,152,128,0.15); color: var(--text-light); }
+
+    .trend-progress-row { margin-bottom: 10px; }
+    .progress-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-light);
+      margin-bottom: 5px;
+    }
+    .progress-track {
+      height: 5px;
+      background: var(--light-tan);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--gold));
+      border-radius: 3px;
+      transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    .trend-insight {
+      font-size: 13px;
+      color: var(--text-mid);
+      line-height: 1.6;
+      font-style: italic;
+      border-left: 2px solid var(--accent-light);
+      padding-left: 10px;
+      margin-bottom: 12px;
+    }
+
+    .trend-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .trend-meta {
+      display: flex;
+      gap: 12px;
+      font-size: 12px;
+      color: var(--text-light);
+      align-items: center;
+    }
+    .risk-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 4px;
+    }
+    .risk-low { background: #6ab187; }
+    .risk-medium { background: var(--gold); }
+    .risk-high { background: #c47a5a; }
+
+    .btn-select-trend {
+      padding: 7px 18px;
+      border: 1.5px solid var(--accent);
+      background: transparent;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      color: var(--accent);
+      cursor: pointer;
+      transition: all 0.2s;
+      font-weight: 500;
+    }
+    .btn-select-trend:hover, .btn-select-trend.active {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    /* RISK SECTION */
+    .risk-section {
+      margin-top: 2rem;
+      border: 1px solid rgba(196,149,106,0.25);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .risk-header {
+      padding: 1rem 1.25rem;
+      background: rgba(196,149,106,0.07);
+      border-bottom: 1px solid rgba(196,149,106,0.15);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-mid);
+    }
+    .risk-item {
+      padding: 0.75rem 1.25rem;
+      border-bottom: 1px solid var(--card-border);
+      font-size: 13px;
+      color: var(--text-mid);
+      line-height: 1.5;
+    }
+    .risk-item:last-child { border-bottom: none; }
+    .risk-name { font-weight: 500; color: var(--dark-brown); }
+
+    /* ══════════════════════════════════════
+       CAMPAIGN STUDIO
+    ══════════════════════════════════════ */
+    .studio-controls {
+      background: var(--warm-white);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .selected-trend-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: var(--cream);
+      border: 1.5px solid var(--card-border);
+      border-radius: 12px;
+      margin-bottom: 1.25rem;
+    }
+    .selected-label { font-size: 11px; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
+    .selected-value { font-weight: 500; color: var(--dark-brown); flex: 1; }
+    .change-trend-btn {
+      font-size: 12px;
+      color: var(--accent);
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-family: 'DM Sans', sans-serif;
+      transition: color 0.2s;
+    }
+    .change-trend-btn:hover { color: var(--dark-brown); }
+
+    /* OUTPUT */
+    .output-area { margin-top: 1.5rem; }
+
+    .output-card {
+      background: var(--warm-white);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      overflow: hidden;
+      animation: fadeUp 0.5s ease;
+    }
+    .output-header {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .output-header-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--dark-brown);
+    }
+    .output-platform-badge {
+      font-size: 11px;
+      padding: 3px 10px;
+      background: var(--light-tan);
+      border-radius: 12px;
+      color: var(--text-mid);
+    }
+    .output-body { padding: 1.5rem; }
+
+    .output-block { margin-bottom: 1.25rem; }
+    .output-block:last-child { margin-bottom: 0; }
+    .output-block-label {
+      font-size: 10px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-light);
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+    .output-hook {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: var(--deep-brown);
+      line-height: 1.4;
+    }
+    .output-caption {
+      font-size: 14px;
+      color: var(--text-dark);
+      line-height: 1.7;
+      white-space: pre-line;
+    }
+    .output-visual {
+      font-size: 13px;
+      color: var(--text-mid);
+      font-style: italic;
+      padding: 10px 14px;
+      background: var(--light-tan);
+      border-radius: 10px;
+      line-height: 1.5;
+    }
+    .output-cta {
+      font-size: 14px;
+      color: var(--brown);
+      font-weight: 500;
+    }
+    .hashtag-row { display: flex; flex-wrap: wrap; gap: 6px; }
+    .hashtag {
+      font-size: 12px;
+      padding: 4px 12px;
+      background: rgba(196,149,106,0.1);
+      border-radius: 20px;
+      color: var(--brown);
+      font-weight: 500;
+    }
+
+    /* SOCIAL PREVIEW */
+    .preview-card {
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      overflow: hidden;
+      margin-top: 1.5rem;
+      background: #fff;
+      animation: fadeUp 0.5s ease 0.1s both;
+    }
+    .preview-top {
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--card-border);
+    }
+    .preview-avatar {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: var(--light-tan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--dark-brown);
+      flex-shrink: 0;
+    }
+    .preview-user-name { font-size: 13px; font-weight: 600; color: var(--text-dark); }
+    .preview-user-handle { font-size: 11px; color: var(--text-light); }
+    .preview-image-area {
+      height: 200px;
+      background: linear-gradient(135deg, var(--light-tan) 0%, var(--tan) 50%, var(--accent-light) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .preview-image-text {
+      font-size: 12px;
+      color: var(--text-mid);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    .preview-image-overlay {
+      position: absolute;
+      bottom: 12px; right: 12px;
+      padding: 4px 10px;
+      background: rgba(253,248,242,0.85);
+      border-radius: 8px;
+      font-size: 11px;
+      color: var(--brown);
+      font-weight: 500;
+    }
+    .preview-body {
+      padding: 14px 16px;
+    }
+    .preview-caption-text {
+      font-size: 13px;
+      color: var(--text-dark);
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+    .preview-caption-text strong { font-weight: 600; }
+    .preview-actions {
+      display: flex;
+      gap: 18px;
+      font-size: 12px;
+      color: var(--text-light);
+      padding-top: 10px;
+      border-top: 1px solid var(--card-border);
+    }
+    .preview-action { display: flex; align-items: center; gap: 4px; cursor: pointer; transition: color 0.2s; }
+    .preview-action:hover { color: var(--accent); }
+
+    /* SHIMMER */
+    .shimmer-box {
+      border-radius: 10px;
+      background: linear-gradient(90deg, var(--light-tan) 25%, var(--tan) 50%, var(--light-tan) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.4s infinite;
+    }
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* EMPTY STATE */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: var(--text-light);
+    }
+    .empty-icon { font-size: 2.5rem; margin-bottom: 1rem; opacity: 0.5; }
+    .empty-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--text-mid); margin-bottom: 0.5rem; }
+    .empty-desc { font-size: 13px; }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 700px) {
+      .nav-links { display: none; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-grid.cols-3 { grid-template-columns: 1fr 1fr; }
+      .app-tab { padding: 6px 10px; font-size: 12px; }
+      .app-tab-icon { display: none; }
+      .stats-bar { gap: 2rem; }
+      .steps-row::before { display: none; }
+      .hero-title { font-size: 2.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════
+     LANDING PAGE
+════════════════════════════════════════ -->
+<div class="page active" id="page-landing">
+  <div class="landing-bg">
+    <div class="bg-circle bg-circle-1"></div>
+    <div class="bg-circle bg-circle-2"></div>
+    <div class="bg-circle bg-circle-3"></div>
+  </div>
+
+  <nav class="nav">
+    <div class="nav-logo">Trend<span>Idea</span></div>
+    <div class="nav-links">
+      <a class="nav-link" onclick="scrollToFeatures()">Features</a>
+      <a class="nav-link" onclick="scrollToHow()">How It Works</a>
+      <a class="nav-link" href="https://github.com" target="_blank">GitHub</a>
+    </div>
+    <button class="nav-cta" onclick="openApp()">Launch App →</button>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-eyebrow">✦ AI-Powered Trend Intelligence</div>
+    <h1 class="hero-title">Turn Trends Into Campaigns<br><em>Before They Peak.</em></h1>
+    <p class="hero-sub">Discover trending content ideas, analyze brand fit, and generate ready-to-post social media campaigns — all powered by AI.</p>
+    <div class="hero-btns">
+      <button class="btn-hero-primary" onclick="openApp()">Start for Free →</button>
+      <button class="btn-hero-secondary" onclick="scrollToFeatures()">Explore Features</button>
+    </div>
+    <div class="stats-bar">
+      <div class="stat-item">
+        <div class="stat-num">50+</div>
+        <div class="stat-label">Trend Signals</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">8</div>
+        <div class="stat-label">Industries</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">3</div>
+        <div class="stat-label">Platforms</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">AI</div>
+        <div class="stat-label">Campaign Engine</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features" id="features-section">
+    <div class="section-header">
+      <div class="section-eyebrow">✦ Platform Features</div>
+      <h2 class="section-title">Everything you need to<br>stay ahead of the trend curve</h2>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🎯</div>
+        <div class="feature-title">Brand Intelligence</div>
+        <div class="feature-desc">Input your brand name, industry, and tone. Our engine matches you with the most relevant trends using a smart scoring algorithm.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📈</div>
+        <div class="feature-title">Trend Match Score</div>
+        <div class="feature-desc">Each trend gets a personalized fit percentage, stage indicator (Rising/Peak/Fading), risk level, and AI-generated insight.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">✦</div>
+        <div class="feature-title">Campaign Studio</div>
+        <div class="feature-desc">Generate complete campaigns with hooks, captions, visual concepts, hashtags, and CTAs — tailored to your selected platform.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📱</div>
+        <div class="feature-title">Live Post Preview</div>
+        <div class="feature-desc">See your generated content inside a realistic social media post preview before you publish anywhere.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚠️</div>
+        <div class="feature-title">Risk Detection</div>
+        <div class="feature-desc">Automatically flags trends with audience mismatch, tone conflict, or poor conversion potential for your brand profile.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🚀</div>
+        <div class="feature-title">Multi-Platform Support</div>
+        <div class="feature-desc">Generate unique content styles for Instagram, TikTok, and X (Twitter) — each optimized for the platform's audience and format.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="how-it-works" id="how-section">
+    <div class="how-inner">
+      <div class="section-header">
+        <div class="section-eyebrow">✦ How It Works</div>
+        <h2 class="section-title">From brand input to viral campaign<br>in three simple steps</h2>
+      </div>
+      <div class="steps-row">
+        <div class="step">
+          <div class="step-num">01</div>
+          <div class="step-title">Describe Your Brand</div>
+          <div class="step-desc">Enter your brand name, industry, tone, and target platform.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <div class="step-title">Discover Trends</div>
+          <div class="step-desc">Browse matched trends ranked by relevance, risk level, and stage.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <div class="step-title">Generate Campaign</div>
+          <div class="step-desc">Pick a content type and instantly get a full ready-to-post campaign.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">04</div>
+          <div class="step-title">Preview & Post</div>
+          <div class="step-desc">Review your content in the live social post preview, then publish.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-banner">
+    <div class="cta-inner">
+      <div class="section-eyebrow">✦ Ready to Trend?</div>
+      <h2 class="section-title">Stop guessing.<br>Start campaigning.</h2>
+      <p>TrendIdea helps creators, brands, and agencies discover viral trends and turn them into engaging content — instantly.</p>
+      <button class="btn-hero-primary" onclick="openApp()">Launch TrendIdea →</button>
+    </div>
+  </section>
+
+  <footer>
+    Built with ✦ by <span>TrendIdea</span> · Powered by AI · No backend required
+  </footer>
+</div>
+
+
+<!-- ════════════════════════════════════════
+     APP PAGE
+════════════════════════════════════════ -->
+<div class="page" id="page-app">
+  <nav class="app-nav">
+    <div class="app-nav-logo" onclick="goHome()">Trend<span>Idea</span></div>
+    <div class="app-tabs">
+      <button class="app-tab active" data-tab="brand" onclick="switchTab('brand', this)">
+        <span class="app-tab-icon">⚙</span> Brand Setup
+      </button>
+      <button class="app-tab" data-tab="trends" onclick="switchTab('trends', this)">
+        <span class="app-tab-icon">📈</span> Trends
+      </button>
+      <button class="app-tab" data-tab="studio" onclick="switchTab('studio', this)">
+        <span class="app-tab-icon">✦</span> Studio
+      </button>
+    </div>
+  </nav>
+
+  <div class="app-container">
+
+    <!-- BRAND TAB -->
+    <div class="app-section active" id="tab-brand">
+      <div class="app-section-header">
+        <h2>Brand Analysis</h2>
+        <p>Tell us about your brand to discover the most relevant trends.</p>
+      </div>
+      <div class="brand-form">
+        <div class="form-grid" style="margin-bottom:1.25rem">
+          <div class="form-field">
+            <label class="form-label">Brand Name</label>
+            <input type="text" class="form-input" id="brand-name" placeholder="e.g. Luna Studio" value="Luna Studio">
+          </div>
+          <div class="form-field">
+            <label class="form-label">Industry</label>
+            <select class="form-select" id="brand-industry">
+              <option value="Fashion">Fashion</option>
+              <option value="Beauty">Beauty</option>
+              <option value="Tech & SaaS">Tech & SaaS</option>
+              <option value="Food & Lifestyle">Food & Lifestyle</option>
+              <option value="Fitness & Wellness">Fitness & Wellness</option>
+              <option value="Finance">Finance</option>
+              <option value="Travel">Travel</option>
+              <option value="Education">Education</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-grid" style="margin-bottom:1.25rem">
+          <div class="form-field">
+            <label class="form-label">Brand Tone</label>
+            <select class="form-select" id="brand-tone">
+              <option value="Premium & Minimal">Premium & Minimal</option>
+              <option value="Bold & Energetic">Bold & Energetic</option>
+              <option value="Warm & Friendly">Warm & Friendly</option>
+              <option value="Edgy & Creative">Edgy & Creative</option>
+              <option value="Professional & Clean">Professional & Clean</option>
+              <option value="Playful & Fun">Playful & Fun</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label class="form-label">Primary Platform</label>
+            <select class="form-select" id="brand-platform">
+              <option value="Instagram">Instagram</option>
+              <option value="TikTok">TikTok</option>
+              <option value="X (Twitter)">X (Twitter)</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-grid cols-1">
+          <div class="form-field">
+            <label class="form-label">Target Audience</label>
+            <input type="text" class="form-input" id="brand-audience" placeholder="e.g. Women 22–35, design-conscious professionals" value="Style-conscious women 22–35">
+          </div>
+        </div>
+        <button class="btn-primary" id="analyze-btn" onclick="analyzeBrand()">Analyze Brand & Discover Trends →</button>
+      </div>
+    </div>
+
+    <!-- TRENDS TAB -->
+    <div class="app-section" id="tab-trends">
+      <div class="app-section-header">
+        <h2>Trend Intelligence</h2>
+        <p id="trends-sub">Personalized trends matched to your brand.</p>
+      </div>
+      <div id="brand-summary-bar" class="brand-summary" style="display:none"></div>
+      <div class="trends-header">
+        <div class="trends-count" id="trends-count"></div>
+        <div class="filter-chips">
+          <button class="filter-chip active" onclick="filterTrends('all', this)">All</button>
+          <button class="filter-chip" onclick="filterTrends('Rising', this)">Rising</button>
+          <button class="filter-chip" onclick="filterTrends('Peak', this)">Peak</button>
+          <button class="filter-chip" onclick="filterTrends('Low', this)">Low Risk</button>
+        </div>
+      </div>
+      <div id="trends-grid" class="trends-grid"></div>
+      <div id="risk-section" style="display:none" class="risk-section">
+        <div class="risk-header">⚠️ Low-Synergy Trends — Avoid for Your Brand</div>
+        <div id="risk-cards"></div>
+      </div>
+    </div>
+
+    <!-- STUDIO TAB -->
+    <div class="app-section" id="tab-studio">
+      <div class="app-section-header">
+        <h2>Campaign Studio</h2>
+        <p>Generate AI-powered campaigns from your selected trend.</p>
+      </div>
+      <div class="studio-controls">
+        <div class="selected-trend-row">
+          <span class="selected-label">Trend</span>
+          <span class="selected-value" id="studio-trend-display">No trend selected</span>
+          <button class="change-trend-btn" onclick="switchTab('trends', document.querySelector('[data-tab=trends]'))">Change →</button>
+        </div>
+        <div class="form-grid cols-3">
+          <div class="form-field">
+            <label class="form-label">Content Type</label>
+            <select class="form-select" id="content-type">
+              <option value="Viral Hook">Viral Hook</option>
+              <option value="Caption">Caption</option>
+              <option value="Conversion Ad">Conversion Ad</option>
+              <option value="Trend Reel Script">Trend Reel Script</option>
+              <option value="Promotional Post">Promotional Post</option>
+              <option value="Meme Concept">Meme Concept</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label class="form-label">Platform</label>
+            <select class="form-select" id="studio-platform">
+              <option value="Instagram">Instagram</option>
+              <option value="TikTok">TikTok</option>
+              <option value="X (Twitter)">X (Twitter)</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label class="form-label">Tone Override</label>
+            <select class="form-select" id="tone-override">
+              <option value="auto">Auto (Brand Tone)</option>
+              <option value="Casual">Casual</option>
+              <option value="Witty">Witty</option>
+              <option value="Inspiring">Inspiring</option>
+              <option value="Urgent">Urgent</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn-primary" id="gen-btn" onclick="generateCampaign()">✦ Generate Campaign</button>
+      </div>
+      <div id="output-area"></div>
+    </div>
+
+  </div>
+</div>
+
+
+<script>
+// ════════════════════════════════════════
+// DATA
+// ════════════════════════════════════════
+const TRENDS = [
+  {
+    name: "Digital Twin Couture",
+    platform: "Instagram",
+    relevance: 98,
+    risk: "Low",
+    stage: "Rising",
+    tags: ["Fashion", "AI", "Digital", "3D"],
+    industries: ["Fashion", "Beauty"],
+    tones: ["Premium & Minimal", "Edgy & Creative"],
+    insight: "Strong aesthetic appeal aligns with visual-first premium branding. Audience skews design-forward, 18–34."
+  },
+  {
+    name: "Silent Luxury Revival",
+    platform: "Instagram",
+    relevance: 95,
+    risk: "Low",
+    stage: "Peak",
+    tags: ["Luxury", "Minimal", "Aesthetic", "High-end"],
+    industries: ["Fashion", "Finance", "Travel"],
+    tones: ["Premium & Minimal", "Professional & Clean"],
+    insight: "Timeless understated branding aligns deeply with minimalist identity and high-income demographics."
+  },
+  {
+    name: "De-influencing Wave",
+    platform: "TikTok",
+    relevance: 88,
+    risk: "Medium",
+    stage: "Rising",
+    tags: ["Authenticity", "Anti-Hype", "Real", "Gen Z"],
+    industries: ["Beauty", "Fitness & Wellness", "Food & Lifestyle"],
+    tones: ["Warm & Friendly", "Playful & Fun", "Bold & Energetic"],
+    insight: "High engagement but requires careful positioning to avoid brand contradiction with premium identity."
+  },
+  {
+    name: "Aesthetic Minimalism 2.0",
+    platform: "Instagram",
+    relevance: 93,
+    risk: "Low",
+    stage: "Rising",
+    tags: ["Minimal", "Clean", "Visual", "2026"],
+    industries: ["Fashion", "Beauty", "Tech & SaaS"],
+    tones: ["Premium & Minimal", "Professional & Clean"],
+    insight: "Clean composition and muted palette trend is gaining momentum among style-conscious micro-creators."
+  },
+  {
+    name: "NPC Persona Marketing",
+    platform: "TikTok",
+    relevance: 72,
+    risk: "High",
+    stage: "Fading",
+    tags: ["TikTok", "Meme", "NPC", "Comedy"],
+    industries: ["Food & Lifestyle", "Fitness & Wellness"],
+    tones: ["Bold & Energetic", "Playful & Fun"],
+    insight: "Trend peaking rapidly. High virality but highly dependent on timing and platform algorithm."
+  },
+  {
+    name: "Raw & Unfiltered Content",
+    platform: "TikTok",
+    relevance: 81,
+    risk: "Medium",
+    stage: "Rising",
+    tags: ["Authentic", "Behind-scenes", "Real", "Candid"],
+    industries: ["Fitness & Wellness", "Education", "Food & Lifestyle"],
+    tones: ["Warm & Friendly", "Bold & Energetic"],
+    insight: "Resonates strongly with Gen Z authenticity values. Works best for brands with a human story to tell."
+  },
+  {
+    name: "Hyper-Niche Community Drops",
+    platform: "X (Twitter)",
+    relevance: 76,
+    risk: "Low",
+    stage: "Rising",
+    tags: ["Community", "Exclusive", "Drops", "Niche"],
+    industries: ["Tech & SaaS", "Education", "Finance"],
+    tones: ["Professional & Clean", "Edgy & Creative"],
+    insight: "High conversion with loyal micro-audience. Less reach but superior engagement-to-conversion ratio."
+  },
+  {
+    name: "Dopamine Dressing",
+    platform: "Instagram",
+    relevance: 89,
+    risk: "Low",
+    stage: "Peak",
+    tags: ["Color", "Fashion", "Joy", "Vibrant"],
+    industries: ["Fashion", "Beauty"],
+    tones: ["Bold & Energetic", "Playful & Fun", "Warm & Friendly"],
+    insight: "Bold color-forward content drives saves and shares. Works well for product launches and lookbooks."
+  },
+  {
+    name: "Micro-Tutorial Reels",
+    platform: "Instagram",
+    relevance: 84,
+    risk: "Low",
+    stage: "Rising",
+    tags: ["Education", "How-to", "Short-form", "Value"],
+    industries: ["Beauty", "Fitness & Wellness", "Education", "Food & Lifestyle"],
+    tones: ["Warm & Friendly", "Professional & Clean", "Playful & Fun"],
+    insight: "Educational micro-content drives saves and follows. Strong algorithm performance across all niches."
+  },
+  {
+    name: "AI-Generated Aesthetic",
+    platform: "TikTok",
+    relevance: 87,
+    risk: "Medium",
+    stage: "Rising",
+    tags: ["AI", "Futuristic", "Digital", "Creative"],
+    industries: ["Tech & SaaS", "Fashion", "Education"],
+    tones: ["Edgy & Creative", "Bold & Energetic", "Premium & Minimal"],
+    insight: "Forward-looking brands using AI visuals gain 'early adopter' credibility. Risk: oversaturation possible."
+  },
+  {
+    name: "Founder Mode Transparency",
+    platform: "X (Twitter)",
+    relevance: 79,
+    risk: "Low",
+    stage: "Peak",
+    tags: ["Founder", "Startup", "Authentic", "Business"],
+    industries: ["Tech & SaaS", "Finance", "Education"],
+    tones: ["Professional & Clean", "Warm & Friendly"],
+    insight: "Behind-the-scenes founder storytelling drives strong B2B credibility and community trust on X."
+  },
+  {
+    name: "Slow Travel Aesthetic",
+    platform: "Instagram",
+    relevance: 82,
+    risk: "Low",
+    stage: "Rising",
+    tags: ["Travel", "Mindful", "Aesthetic", "Lifestyle"],
+    industries: ["Travel", "Food & Lifestyle", "Fitness & Wellness"],
+    tones: ["Warm & Friendly", "Premium & Minimal"],
+    insight: "Anti-hustle, experience-over-destination narrative resonates deeply with millennial audience."
+  }
+];
+
+// ════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════
+let brand = { name: 'Luna Studio', industry: 'Fashion', tone: 'Premium & Minimal', platform: 'Instagram', audience: 'Style-conscious women 22–35' };
+let matchedTrends = [];
+let allTrends = [];
+let selectedTrend = null;
+let activeFilter = 'all';
+
+// ════════════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════════════
+function openApp() {
+  document.getElementById('page-landing').classList.remove('active');
+  document.getElementById('page-app').classList.add('active');
+  window.scrollTo(0, 0);
+  if (!matchedTrends.length) analyzeBrand(true);
+}
+
+function goHome() {
+  document.getElementById('page-app').classList.remove('active');
+  document.getElementById('page-landing').classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function scrollToFeatures() {
+  document.getElementById('features-section').scrollIntoView({ behavior: 'smooth' });
+}
+function scrollToHow() {
+  document.getElementById('how-section').scrollIntoView({ behavior: 'smooth' });
+}
+
+function switchTab(name, btn) {
+  document.querySelectorAll('.app-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.app-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  if (btn) btn.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ════════════════════════════════════════
+// BRAND ANALYSIS
+// ════════════════════════════════════════
+function analyzeBrand(silent) {
+  if (!silent) {
+    brand.name = document.getElementById('brand-name').value.trim() || 'My Brand';
+    brand.industry = document.getElementById('brand-industry').value;
+    brand.tone = document.getElementById('brand-tone').value;
+    brand.platform = document.getElementById('brand-platform').value;
+    brand.audience = document.getElementById('brand-audience').value.trim();
+  }
+
+  const btn = document.getElementById('analyze-btn');
+  if (btn) { btn.classList.add('loading'); btn.disabled = true; }
+
+  setTimeout(() => {
+    allTrends = TRENDS.map(t => {
+      let score = t.relevance;
+      if (t.industries.includes(brand.industry)) score = Math.min(100, score + 6);
+      if (t.tones.includes(brand.tone)) score = Math.min(100, score + 4);
+      if (t.platform === brand.platform) score = Math.min(100, score + 3);
+      if (brand.audience && t.insight.toLowerCase().includes('gen z') && brand.audience.toLowerCase().includes('gen z')) score = Math.min(100, score + 3);
+      return { ...t, matchScore: Math.round(score) };
+    }).sort((a, b) => b.matchScore - a.matchScore);
+
+    matchedTrends = [...allTrends];
+
+    if (btn) { btn.classList.remove('loading'); btn.disabled = false; }
+    renderTrends();
+    renderBrandSummary();
+    if (!silent) switchTab('trends', document.querySelector('[data-tab=trends]'));
+  }, 600);
+}
+
+// ════════════════════════════════════════
+// BRAND SUMMARY BAR
+// ════════════════════════════════════════
+function renderBrandSummary() {
+  const bar = document.getElementById('brand-summary-bar');
+  bar.style.display = 'flex';
+  bar.innerHTML = `
+    <span class="brand-summary-title">Analyzing as:</span>
+    <span class="brand-chip">${brand.name}</span>
+    <span class="brand-chip">${brand.industry}</span>
+    <span class="brand-chip">${brand.tone}</span>
+    <span class="brand-chip">${brand.platform}</span>
+    <button class="btn-edit" onclick="switchTab('brand', document.querySelector('[data-tab=brand]'))">Edit</button>
+  `;
+}
+
+// ════════════════════════════════════════
+// RENDER TRENDS
+// ════════════════════════════════════════
+function filterTrends(filter, btn) {
+  activeFilter = filter;
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderTrends();
+}
+
+function renderTrends() {
+  const grid = document.getElementById('trends-grid');
+  const countEl = document.getElementById('trends-count');
+
+  let display = allTrends.filter(t => {
+    if (activeFilter === 'Rising') return t.stage === 'Rising';
+    if (activeFilter === 'Peak') return t.stage === 'Peak';
+    if (activeFilter === 'Low') return t.risk === 'Low';
+    return true;
+  }).filter(t => !(t.risk === 'High' && t.matchScore < 80));
+
+  const risky = allTrends.filter(t => t.risk === 'High' && t.matchScore < 80);
+
+  countEl.textContent = `${display.length} trend${display.length !== 1 ? 's' : ''} matched`;
+  document.getElementById('trends-sub').textContent = `Personalized for ${brand.name} · ${brand.industry} · ${brand.tone}`;
+
+  grid.innerHTML = display.map(t => renderTrendCard(t)).join('');
+
+  // Animate progress bars
+  setTimeout(() => {
+    document.querySelectorAll('.progress-fill').forEach(el => {
+      el.style.width = el.dataset.width + '%';
+    });
+  }, 50);
+
+  const riskSection = document.getElementById('risk-section');
+  const riskCards = document.getElementById('risk-cards');
+  if (risky.length && activeFilter === 'all') {
+    riskSection.style.display = 'block';
+    riskCards.innerHTML = risky.map(t => `
+      <div class="risk-item">
+        <span class="risk-name">${t.name}</span> — ${t.platform} · ${t.stage} stage.
+        Audience mismatch for <em>${brand.tone}</em> tone. Risk level: ${t.risk}.
+      </div>
+    `).join('');
+  } else {
+    riskSection.style.display = 'none';
+  }
+}
+
+function renderTrendCard(t) {
+  const isSel = selectedTrend && selectedTrend.name === t.name;
+  const badgeClass = t.matchScore >= 95 ? 'top' : t.matchScore >= 85 ? 'high' : '';
+  const stageClass = 'stage-' + t.stage.toLowerCase();
+  const riskClass = 'risk-' + t.risk.toLowerCase();
+
+  return `<div class="trend-card ${isSel ? 'selected' : ''}">
+    <div class="trend-top">
+      <div class="trend-name">${t.name}</div>
+      <div class="match-badge ${badgeClass}">${t.matchScore}% match</div>
+    </div>
+    <div class="trend-tags">
+      ${t.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+      <span class="tag ${stageClass}">${t.stage}</span>
+    </div>
+    <div class="trend-progress-row">
+      <div class="progress-labels"><span>Relevance Score</span><span>${t.relevance}%</span></div>
+      <div class="progress-track">
+        <div class="progress-fill" data-width="${t.relevance}" style="width:0%"></div>
+      </div>
+    </div>
+    <div class="trend-insight">"${t.insight}"</div>
+    <div class="trend-footer">
+      <div class="trend-meta">
+        <span>📱 ${t.platform}</span>
+        <span><span class="risk-dot ${riskClass}"></span>${t.risk} Risk</span>
+      </div>
+      <button class="btn-select-trend ${isSel ? 'active' : ''}" onclick='selectTrend(${JSON.stringify(t)})'>
+        ${isSel ? '✓ Selected' : 'Use Trend →'}
+      </button>
+    </div>
+  </div>`;
+}
+
+// ════════════════════════════════════════
+// SELECT TREND
+// ════════════════════════════════════════
+function selectTrend(t) {
+  selectedTrend = t;
+  document.getElementById('studio-trend-display').textContent = t.name;
+  if (t.platform === 'TikTok') document.getElementById('studio-platform').value = 'TikTok';
+  else if (t.platform === 'X (Twitter)') document.getElementById('studio-platform').value = 'X (Twitter)';
+  else document.getElementById('studio-platform').value = 'Instagram';
+  renderTrends();
+  switchTab('studio', document.querySelector('[data-tab=studio]'));
+}
+
+// ════════════════════════════════════════
+// CAMPAIGN GENERATION
+// ════════════════════════════════════════
+function generateCampaign() {
+  if (!selectedTrend) {
+    document.getElementById('output-area').innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">📈</div>
+        <div class="empty-title">No trend selected</div>
+        <div class="empty-desc">Go to the Trends tab and click "Use Trend →" to select one.</div>
+      </div>`;
+    return;
+  }
+
+  const contentType = document.getElementById('content-type').value;
+  const platform = document.getElementById('studio-platform').value;
+  const toneOverride = document.getElementById('tone-override').value;
+  const effectiveTone = toneOverride === 'auto' ? brand.tone : toneOverride;
+
+  const btn = document.getElementById('gen-btn');
+  btn.classList.add('loading');
+  btn.disabled = true;
+
+  document.getElementById('output-area').innerHTML = `
+    <div class="output-card">
+      <div class="output-body">
+        <div class="shimmer-box" style="height:22px;width:60%;margin-bottom:1.5rem"></div>
+        <div class="shimmer-box" style="height:14px;width:100%;margin-bottom:8px"></div>
+        <div class="shimmer-box" style="height:14px;width:85%;margin-bottom:8px"></div>
+        <div class="shimmer-box" style="height:14px;width:75%;margin-bottom:1.5rem"></div>
+        <div class="shimmer-box" style="height:60px;width:100%"></div>
+      </div>
+    </div>`;
+
+  setTimeout(() => {
+    const campaign = buildCampaign(contentType, platform, effectiveTone);
+    btn.classList.remove('loading');
+    btn.disabled = false;
+    renderCampaignOutput(campaign, contentType, platform);
+  }, 900);
+}
+
+function buildCampaign(type, platform, tone) {
+  const t = selectedTrend;
+  const b = brand;
+  const isMinimal = tone.includes('Minimal') || tone.includes('Premium');
+  const isBold = tone.includes('Bold') || tone.includes('Energetic') || tone.includes('Playful');
+
+  const hooks = {
+    "Viral Hook": `Nobody expected THIS ${t.tags[0].toLowerCase()} trend to hit in 2026…`,
+    "Caption": `The ${t.name} era is officially here.`,
+    "Conversion Ad": `This is the only ${t.tags[0].toLowerCase()} trend that actually converts.`,
+    "Trend Reel Script": `POV: You discovered ${t.name} before it peaked.`,
+    "Promotional Post": `${b.name} × ${t.name}: This changes everything.`,
+    "Meme Concept": `When ${t.name} hits different for ${b.industry.toLowerCase()} brands 💀`
+  };
+
+  const captions = {
+    "Viral Hook": `We've been quietly watching ${t.name} evolve — and it's finally time to talk about it. As ${b.name}, we're not just following this shift. We're defining it. The era of ${t.tags[0].toLowerCase()} is here and we're ready.\n\n${t.insight.split('.')[0]}.`,
+    "Caption": `${b.name} is leaning into ${t.name} — and here's why it makes perfect sense for us.\n\nOur ${tone.toLowerCase()} identity was built for exactly this moment. ${t.insight.split('.')[0]}.\n\nThis isn't a trend we're chasing. It's one we're built for.`,
+    "Conversion Ad": `Stop scrolling.\n\n${b.name} just dropped something you've been waiting for. Inspired by the ${t.name} movement reshaping ${b.industry.toLowerCase()} right now.\n\nLimited availability. Designed for the ones who move first.`,
+    "Trend Reel Script": `[0–3s] Hook text: "${t.name} is taking over ${b.industry.toLowerCase()}"\n[3–8s] Transformation or product reveal sequence\n[8–12s] Close-up with brand logo and ${t.tags[0].toLowerCase()} aesthetic\n[12–15s] CTA screen with handle\n\nAudio: trending audio from ${platform} explore page.`,
+    "Promotional Post": `${b.name}'s latest drop is deeply inspired by the ${t.name} movement.\n\n${t.insight.split('.')[0]}. ${t.stage === 'Rising' ? "This trend is just getting started." : "We caught it at peak."}\n\nDesigned for people who don't follow trends — they create them.`,
+    "Meme Concept": `Format: "${isBold ? 'Distracted Boyfriend' : 'Expectation vs Reality'}"\n\nLeft panel: ${t.tags[1] || 'other brands'} trying to hop on the trend late\nRight panel: ${b.name} already built for ${t.name}\n\nCaption: "We don't pivot. We were always ${t.tags[0].toLowerCase()}."`
+  };
+
+  const visuals = {
+    "Viral Hook": `${isMinimal ? 'Moody, cinematic close-up. Muted palette.' : 'High-contrast editorial shot. Bold colors.'} ${t.tags[0]} aesthetic. Minimal text overlay. ${platform === 'TikTok' ? '9:16 vertical format.' : 'Square or 4:5 format.'}`,
+    "Caption": `${isMinimal ? 'Clean editorial grid layout. White space dominant.' : 'Bold color blocking.'} Product prominently featured. ${t.tags[0]} color story throughout.`,
+    "Conversion Ad": `Product-first layout with strong CTA. ${isMinimal ? 'Clean minimal background.' : 'Bold lifestyle photography.'} Price or offer visible within first frame.`,
+    "Trend Reel Script": `Vertical 9:16 format. Fast cuts (1–2s each). Brand font text overlays. ${t.tags[0]} ${tone.toLowerCase()} aesthetic. Trending audio from ${platform}.`,
+    "Promotional Post": `Brand-led lifestyle imagery. ${t.tags[0]} color story. ${isMinimal ? 'Luxury editorial photography style.' : 'Vibrant, high-energy lifestyle shots.'} Collection pieces featured.`,
+    "Meme Concept": `Simple meme format with brand colors injected. ${b.name} branding subtle but visible. Share-worthy and relatable to ${b.industry.toLowerCase()} audience.`
+  };
+
+  const hashtags = {
+    "Viral Hook": [`#${t.name.replace(/\s/g,'')}`, `#${b.industry.replace(/\s/g,'')}2026`, `#${t.tags[0]}`, `#TrendIdea`, `#${b.name.replace(/\s/g,'')}`],
+    "Caption": [`#${b.industry.replace(/\s/g,'')}`, `#${t.tags[0]}`, `#${platform.replace(/\s/g,'').replace(/[()]/g,'')}`, `#ContentCreator`, `#TrendIdea`],
+    "Conversion Ad": [`#ShopNow`, `#${b.name.replace(/\s/g,'')}`, `#${t.tags[0]}`, `#${t.name.replace(/\s/g,'')}`, `#Ad`],
+    "Trend Reel Script": [`#Reel`, `#${t.name.replace(/\s/g,'')}`, `#${b.industry.replace(/\s/g,'')}Reel`, `#FYP`, `#TrendIdea`],
+    "Promotional Post": [`#${b.name.replace(/\s/g,'')}`, `#NewDrop`, `#${t.tags[0]}`, `#${t.name.replace(/\s/g,'')}`, `#${b.industry.replace(/\s/g,'')}2026`],
+    "Meme Concept": [`#${b.industry.replace(/\s/g,'')}Meme`, `#${t.tags[0]}`, `#${b.name.replace(/\s/g,'')}`, `#Relatable`, `#TrendIdea`]
+  };
+
+  const ctas = {
+    "Viral Hook": "Save this post — you'll want to reference it later.",
+    "Caption": `Drop a 🔥 if you're into this direction.`,
+    "Conversion Ad": "Available now — tap to explore. Link in bio.",
+    "Trend Reel Script": "Follow for more trend-first content drops.",
+    "Promotional Post": "Explore the collection → link in bio.",
+    "Meme Concept": "Tag a brand that's still catching up. 👀"
+  };
+
+  return {
+    hook: hooks[type],
+    caption: captions[type],
+    visual: visuals[type],
+    hashtags: hashtags[type],
+    cta: ctas[type]
+  };
+}
+
+// ════════════════════════════════════════
+// RENDER OUTPUT
+// ════════════════════════════════════════
+function renderCampaignOutput(c, type, platform) {
+  const initials = brand.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+
+  document.getElementById('output-area').innerHTML = `
+    <div class="output-card">
+      <div class="output-header">
+        <div class="output-header-title">✦ ${type} — ${selectedTrend.name}</div>
+        <div class="output-platform-badge">📱 ${platform}</div>
+      </div>
+      <div class="output-body">
+        <div class="output-block">
+          <div class="output-block-label">Hook</div>
+          <div class="output-hook">${c.hook}</div>
+        </div>
+        <div class="output-block">
+          <div class="output-block-label">Caption</div>
+          <div class="output-caption">${c.caption.replace(/\n/g, '<br>')}</div>
+        </div>
+        <div class="output-block">
+          <div class="output-block-label">Visual Concept</div>
+          <div class="output-visual">${c.visual}</div>
+        </div>
+        <div class="output-block">
+          <div class="output-block-label">Hashtags</div>
+          <div class="hashtag-row">${c.hashtags.map(h => `<span class="hashtag">${h}</span>`).join('')}</div>
+        </div>
+        <div class="output-block">
+          <div class="output-block-label">Call to Action</div>
+          <div class="output-cta">${c.cta}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="preview-card">
+      <div class="preview-top">
+        <div class="preview-avatar">${initials}</div>
+        <div>
+          <div class="preview-user-name">${brand.name}</div>
+          <div class="preview-user-handle">@${brand.name.toLowerCase().replace(/\s/g, '')} · ${platform}</div>
+        </div>
+      </div>
+      <div class="preview-image-area">
+        <div class="preview-image-text">${selectedTrend.tags[0]} Aesthetic</div>
+        <div class="preview-image-overlay">${brand.industry}</div>
+      </div>
+      <div class="preview-body">
+        <div class="preview-caption-text">
+          <strong>${brand.name}</strong> ${c.caption.split('.')[0].split('\n')[0]}.
+          <br><span style="color:var(--text-light);font-size:12px">${c.hashtags.slice(0,3).join(' ')}</span>
+        </div>
+        <div class="preview-actions">
+          <span class="preview-action">♡ 2.4k</span>
+          <span class="preview-action">💬 187</span>
+          <span class="preview-action">↗ 304</span>
+          <span class="preview-action" style="margin-left:auto">🔖 Save</span>
+        </div>
+      </div>
+    </div>`;
+}
+
+// ════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════
+window.addEventListener('DOMContentLoaded', () => {
+  // Pre-load brand so trends are ready if user opens app directly
+  analyzeBrand(true);
+});
+</script>
+</body>
+</html>
