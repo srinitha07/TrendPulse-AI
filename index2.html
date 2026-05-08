@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrendPulse | 2026 AI Studio</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container">
+        <main id="homeView" class="view active">
+            <div class="hero-tag">2026 Trend Intelligence</div>
+            <h1>Turn Trends Into Campaigns<br>Before They Peak</h1>
+            <p class="subtext">AI-powered trend matching and content studio for modern brands.</p>
+            <div class="btn-group">
+                <button class="btn-main" onclick="showView('analyzeView')">Analyze Trends</button>
+                <button class="btn-outline" onclick="showView('campaignView')">Campaign Studio</button>
+            </div>
+        </main>
+
+        <main id="analyzeView" class="view">
+            <span class="back-btn" onclick="showView('homeView')">← Home</span>
+            <h2>Brand Intel</h2>
+            <div class="form-card">
+                <div class="input-group">
+                    <label>Brand Name</label>
+                    <input type="text" id="brandName" placeholder="e.g. Luna Aesthetics">
+                </div>
+                <div class="input-group">
+                    <label>Industry</label>
+                    <select id="brandIndustry">
+                        <option value="fashion">Fashion & Style</option>
+                        <option value="tech">Tech & AI</option>
+                        <option value="food">Food & Beverage</option>
+                        <option value="wellness">Wellness</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Brand Tone</label>
+                    <select id="brandTone">
+                        <option value="Funny & Relatable">Funny & Relatable</option>
+                        <option value="Premium & Minimal">Premium & Minimal</option>
+                        <option value="Bold & Edgy">Bold & Edgy</option>
+                    </select>
+                </div>
+                <button class="btn-main" style="width:100%" onclick="runAnalysis()">Analyze Market Pulse</button>
+            </div>
+        </main>
+
+        <main id="resultsView" class="view">
+            <span class="back-btn" onclick="showView('analyzeView')">← Change Brand</span>
+            <h2 id="resultsTitle">Trend Matches</h2>
+            <div id="analysisGrid" class="trend-grid"></div>
+            
+            <div style="margin-top: 4rem; border-top: 1px solid var(--border); padding-top: 2rem;">
+                <h3 style="font-size: 1.1rem; color: var(--text-dim);">⚠️ High Risk / Low Synergy</h3>
+                <div id="mismatchGrid" class="trend-grid low-synergy"></div>
+            </div>
+        </main>
+
+        <main id="campaignView" class="view">
+            <span class="back-btn" onclick="showView('homeView')">← Back</span>
+            <h2>Campaign Studio</h2>
+            
+            <div class="output-container">
+                <div class="studio-panel">
+                    <div class="input-group">
+                        <label>Target Trend</label>
+                        <input type="text" id="targetTrend" placeholder="Select a trend...">
+                    </div>
+                    <div class="input-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div>
+                            <label>Platform</label>
+                            <select id="platform">
+                                <option value="Instagram">Instagram</option>
+                                <option value="TikTok">TikTok</option>
+                                <option value="X (Twitter)">X (Twitter)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label>Content Type</label>
+                            <select id="contentType">
+                                <option value="Viral Meme">Viral Meme Idea</option>
+                                <option value="Engaging Caption">Engaging Caption</option>
+                                <option value="High-Conversion Ad">Conversion Ad</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button id="genBtn" class="btn-main" style="width:100%" onclick="generateCampaign()">Generate WOW Moment</button>
+                    
+                    <div id="loader" class="loader">
+                        <p id="loaderText" style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 10px;">Consulting 2026 Pulse...</p>
+                        <div class="shimmer" style="height: 10px; width: 100%;"></div>
+                    </div>
+
+                    <div id="campaignOutput" style="margin-top: 25px; display: none;" class="structured-output">
+                        <hr style="margin-bottom: 20px; border: 0; border-top: 1px solid var(--border);">
+                        <div id="studioContent"></div>
+                        <button class="btn-outline btn-sm" style="margin-top: 15px; width: 100%;" onclick="generateCampaign()">✨ Regenerate Idea</button>
+                    </div>
+                </div>
+
+                <div class="preview-box">
+                    <label>Live Preview</label>
+                    <div class="mock-post">
+                        <div class="mock-header">
+                            <div class="mock-user">
+                                <div class="mock-avatar"></div>
+                                <div>
+                                    <b id="prevBrand" style="display: block; font-size: 0.85rem;">Brand</b>
+                                    <span style="font-size: 0.7rem; color: var(--text-dim);">2 min ago • Sponsored</span>
+                                </div>
+                            </div>
+                            <span style="font-weight: bold;">···</span>
+                        </div>
+                        <div id="prevHook" style="font-weight: 600; margin-bottom: 4px;"></div>
+                        <div id="prevCaption">Click generate to see magic...</div>
+                        <div class="mock-img" id="prevVisual">Visual concept will appear here</div>
+                        <div id="prevTags" style="color: #1d9bf0; font-size: 0.8rem; margin: 8px 0;"></div>
+                        <div id="prevCTA" class="cta-line"></div>
+                        <div class="mock-footer">
+                            <span>❤️ 1.2k</span> <span>💬 48</span> <span>✈️ Share</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
